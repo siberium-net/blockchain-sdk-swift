@@ -136,9 +136,9 @@ extension EthereumWalletManager: TransactionSender {
                         throw WalletError.failedToGetFee
                 }
                 
-                let minAmount = Amount(with: self.wallet.blockchain, address: self.wallet.address, value: minDecimal)
-                let normalAmount = Amount(with: self.wallet.blockchain, address: self.wallet.address, value: normalDecimal)
-                let maxAmount = Amount(with: self.wallet.blockchain, address: self.wallet.address, value: maxDecimal)
+                let minAmount = Amount(with: self.wallet.blockchain, value: minDecimal)
+                let normalAmount = Amount(with: self.wallet.blockchain, value: normalDecimal)
+                let maxAmount = Amount(with: self.wallet.blockchain, value: maxDecimal)
                 
                 return [minAmount, normalAmount, maxAmount]
         }

@@ -59,7 +59,6 @@ public struct Wallet {
     
     mutating func add(coinValue: Decimal, address: String? = nil) {
         let coinAmount = Amount(with: blockchain,
-                                address: address ?? self.address,
                                 type: .coin,
                                 value: coinValue)
         add(amount: coinAmount)
@@ -67,7 +66,6 @@ public struct Wallet {
     
     mutating func add(reserveValue: Decimal, address: String? = nil) {
         let reserveAmount = Amount(with: blockchain,
-                                   address: address ?? self.address,
                                    type: .reserve,
                                    value: reserveValue)
         add(amount: reserveAmount)
@@ -91,7 +89,7 @@ public struct Wallet {
     }
     
     mutating func addPendingTransaction() {
-        let dummyAmount = Amount(with: blockchain, address: "unknown", type: .coin, value: 0)
+        let dummyAmount = Amount(with: blockchain, type: .coin, value: 0)
         var tx = Transaction(amount: dummyAmount,
                              fee: dummyAmount,
                              sourceAddress: "unknown",

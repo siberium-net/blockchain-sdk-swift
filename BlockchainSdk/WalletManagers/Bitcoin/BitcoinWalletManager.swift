@@ -84,9 +84,9 @@ class BitcoinWalletManager: WalletManager {
                 txBuilder.feeRates[normalFee] = normalRate
                 txBuilder.feeRates[maxFee] = maxRate
                 return [
-                    Amount(with: self.wallet.blockchain, address: self.wallet.address, value: minFee),
-                    Amount(with: self.wallet.blockchain, address: self.wallet.address, value: normalFee),
-                    Amount(with: self.wallet.blockchain, address: self.wallet.address, value: maxFee)
+                    Amount(with: self.wallet.blockchain, value: minFee),
+                    Amount(with: self.wallet.blockchain, value: normalFee),
+                    Amount(with: self.wallet.blockchain, value: maxFee)
                 ]
         }
         .eraseToAnyPublisher()

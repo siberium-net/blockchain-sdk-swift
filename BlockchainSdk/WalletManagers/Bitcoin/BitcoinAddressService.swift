@@ -29,8 +29,8 @@ public class BitcoinAddressService: AddressService {
     }
     
     public func makeAddresses(from walletPublicKey: Data) -> [Address] {
-        let bech32AddressString = bech32.makeAddress(from: walletPublicKey)
-        let legacyAddressString = legacy.makeAddress(from: walletPublicKey)
+        let bech32AddressString: String = bech32.makeAddress(from: walletPublicKey)
+        let legacyAddressString: String = legacy.makeAddress(from: walletPublicKey)
       
         let bech32Address = BitcoinAddress(type: .bech32, value: bech32AddressString)
         
@@ -43,9 +43,9 @@ public class BitcoinAddressService: AddressService {
 		guard let script = try create1Of2MultisigOutputScript(firstPublicKey: firstPublicKey, secondPublicKey: secondPublicKey) else {
 			throw BlockchainSdkError.failedToCreateMultisigScript
 		}
-		let legacyAddressString = legacy.makeMultisigAddress(from: script.data.sha256Ripemd160)
+        let legacyAddressString: String = legacy.makeMultisigAddress(from: script.data.sha256Ripemd160)
 		let scriptAddress = BitcoinScriptAddress(script: script, value: legacyAddressString, type: .legacy)
-		let bech32AddressString = bech32.makeMultisigAddress(from: script.data.sha256())
+        let bech32AddressString: String = bech32.makeMultisigAddress(from: script.data.sha256())
 		let bech32Address = BitcoinScriptAddress(script: script, value: bech32AddressString, type: .bech32)
 		return [bech32Address, scriptAddress]
 	}
@@ -70,13 +70,18 @@ public class BitcoinLegacyAddressService: AddressService {
         converter = Base58AddressConverter(addressVersion: networkParams.pubKeyHash, addressScriptVersion: networkParams.scriptHash)
     }
     
-    public func makeAddress(from walletPublicKey: Data) -> String {
+    public func makeAddress(from pubkey: Data) -> BitcoinCore.LegacyAddress {
         let publicKey = PublicKey(withAccount: 0,
                                   index: 0,
                                   external: true,
-                                  hdPublicKeyData: walletPublicKey)
+                                  hdPublicKeyData: pubkey)
         
-        let address = try! converter.convert(publicKey: publicKey, type: .p2pkh).stringValue
+        let address = try! converter.convert(publicKey: publicKey, type: .p2pkh) as! BitcoinCore.LegacyAddress
+        return address
+    }
+    
+    public func makeAddress(from walletPublicKey: Data) -> String {
+        let address = makeAddress(from: walletPublicKey).stringValue
         
         return address
     }
@@ -89,9 +94,13 @@ public class BitcoinLegacyAddressService: AddressService {
             return false
         }
     }
+    
+    public func makeMultisigAddress(from scriptHash: Data) -> BitcoinCore.LegacyAddress {
+        try! converter.convert(keyHash: scriptHash, type: .p2sh) as! BitcoinCore.LegacyAddress
+    }
 	
 	public func makeMultisigAddress(from scriptHash: Data) -> String {
-		let address = try! converter.convert(keyHash: scriptHash, type: .p2sh).stringValue
+		let address = makeMultisigAddress(from: scriptHash).stringValue
 		
 		return address
 	}
@@ -106,14 +115,20 @@ public class BitcoinBech32AddressService: AddressService {
 		converter = SegWitBech32AddressConverter(prefix: networkParams.bech32PrefixPattern, scriptConverter: scriptConverter)
 	}
 	
+    public func makeAddress(from walletPublicKey: Data) -> SegWitAddress {
+        let compressedKey = Secp256k1Utils.convertKeyToCompressed(walletPublicKey)!
+        let publicKey = PublicKey(withAccount: 0,
+                                  index: 0,
+                                  external: true,
+                                  hdPublicKeyData: compressedKey)
+        
+        let address = try! converter.convert(publicKey: publicKey, type: .p2wpkh) as! SegWitAddress
+        
+        return address
+    }
+    
 	public func makeAddress(from walletPublicKey: Data) -> String {
-		let compressedKey = Secp256k1Utils.convertKeyToCompressed(walletPublicKey)!
-		let publicKey = PublicKey(withAccount: 0,
-								  index: 0,
-								  external: true,
-								  hdPublicKeyData: compressedKey)
-		
-		let address = try! converter.convert(publicKey: publicKey, type: .p2wpkh).stringValue
+		let address = makeAddress(from: walletPublicKey).stringValue
 		
 		return address
 	}
@@ -126,10 +141,14 @@ public class BitcoinBech32AddressService: AddressService {
 			return false
 		}
 	}
+    
+    public func makeMultisigAddress(from scriptHash: Data) -> SegWitAddress {
+        try! converter.convert(scriptHash: scriptHash) as! SegWitAddress
+    }
 	
 	public func makeMultisigAddress(from scriptHash: Data) -> String {
 		print("Script hash hex: ", scriptHash.hex)
-		let address = try! converter.convert(scriptHash: scriptHash).stringValue
+		let address = makeMultisigAddress(from: scriptHash).stringValue
 		
 		return address
 	}
