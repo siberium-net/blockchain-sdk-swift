@@ -249,6 +249,7 @@
 		5DFF005F2521F772005203FB /* DucatusWalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFF005E2521F771005203FB /* DucatusWalletManager.swift */; };
 		88095B618D07D706BB871FE6 /* Pods_BlockchainSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1CC9E29B257CD29E6143FDD /* Pods_BlockchainSdk.framework */; };
 		B022BCAB25EF623C00E24E2C /* EthereumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B022BCAA25EF623C00E24E2C /* EthereumTests.swift */; };
+		B022BCAF25EF81C200E24E2C /* LitecoinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B022BCAE25EF81C200E24E2C /* LitecoinTests.swift */; };
 		B056729B2570F9DC00A8CB59 /* BlockchainSdkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B056729A2570F9DC00A8CB59 /* BlockchainSdkError.swift */; };
 		B05BF634256F953500B50FD7 /* BitcoinAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05BF633256F953500B50FD7 /* BitcoinAddress.swift */; };
 		B0E0F72925EE113B00240C6B /* BitcoinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E0F72825EE113B00240C6B /* BitcoinTests.swift */; };
@@ -401,6 +402,7 @@
 		A172F9D47772F23948771418 /* Pods_BlockchainSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlockchainSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6F5E34B42B2043635FB1F51 /* Pods-BlockchainSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlockchainSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-BlockchainSdkTests/Pods-BlockchainSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B022BCAA25EF623C00E24E2C /* EthereumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumTests.swift; sourceTree = "<group>"; };
+		B022BCAE25EF81C200E24E2C /* LitecoinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LitecoinTests.swift; sourceTree = "<group>"; };
 		B022D30D2537292800D934D7 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B022D3102537475B00D934D7 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B056729A2570F9DC00A8CB59 /* BlockchainSdkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockchainSdkError.swift; sourceTree = "<group>"; };
@@ -477,8 +479,9 @@
 			children = (
 				5D14E47C2397B80F00C15FC8 /* BlockchainSdkTests.swift */,
 				B0E0F72825EE113B00240C6B /* BitcoinTests.swift */,
-				5D14E47E2397B80F00C15FC8 /* Info.plist */,
 				B022BCAA25EF623C00E24E2C /* EthereumTests.swift */,
+				B022BCAE25EF81C200E24E2C /* LitecoinTests.swift */,
+				5D14E47E2397B80F00C15FC8 /* Info.plist */,
 			);
 			path = BlockchainSdkTests;
 			sourceTree = "<group>";
@@ -1268,6 +1271,7 @@
 				5DDD832725BF0EBC00166EA9 /* BlockchainInfoApiResponse.swift in Sources */,
 				5DDD82E025BF0E0900166EA9 /* StellarTransactionParams.swift in Sources */,
 				5DDD82B225BF0D2F00166EA9 /* WalletManager.swift in Sources */,
+				B022BCAF25EF81C200E24E2C /* LitecoinTests.swift in Sources */,
 				5DDD832D25BF0EC500166EA9 /* IssuedAmount.swift in Sources */,
 				5DDD833725BF0EC900166EA9 /* XRPLResponse.swift in Sources */,
 				5DDD82EF25BF0E1500166EA9 /* BitcoinCashWalletManager.swift in Sources */,
