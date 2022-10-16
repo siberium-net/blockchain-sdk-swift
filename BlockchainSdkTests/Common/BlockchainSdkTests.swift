@@ -186,6 +186,7 @@ class BlockchainSdkTests: XCTestCase {
         case .ethereumFair: break
         case .ethereumPoW: break
         case .saltPay: break
+        case .ravencoin: break
         }
         // Did you get a compilation error here? If so, add your new blockchain to the array below
         
@@ -218,6 +219,7 @@ class BlockchainSdkTests: XCTestCase {
             .ethereumFair,
             .ethereumPoW(testnet: false),
             .saltPay,
+            .ravencoin(testnet: false), 
         ]
         
         let encoder = JSONEncoder()

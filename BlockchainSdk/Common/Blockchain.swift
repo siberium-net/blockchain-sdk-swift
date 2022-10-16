@@ -41,7 +41,8 @@ public enum Blockchain: Equatable, Hashable {
     case gnosis
     case optimism(testnet: Bool)
     case saltPay
-    
+    case ravencoin(testnet: Bool)
+
     public var isTestnet: Bool {
         switch self {
         case .bitcoin(let testnet):
@@ -84,6 +85,8 @@ public enum Blockchain: Equatable, Hashable {
             return false
         case .saltPay:
             return false
+        case .ravencoin(let testnet):
+            return testnet
         }
     }
     
@@ -102,7 +105,7 @@ public enum Blockchain: Equatable, Hashable {
     
     public var decimalCount: Int {
         switch self {
-        case .bitcoin, .litecoin, .bitcoinCash, .ducatus, .binance, .dogecoin, .dash:
+        case .bitcoin, .litecoin, .bitcoinCash, .ducatus, .binance, .dogecoin, .dash, .ravencoin:
             return 8
         case .ethereum, .ethereumClassic, .ethereumPoW, .ethereumFair, .rsk, .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .optimism, .saltPay:
             return 18
@@ -171,6 +174,8 @@ public enum Blockchain: Equatable, Hashable {
             return "ETHW"
         case .ethereumFair:
             return "ETF"
+        case .ravencoin:
+            return "RVN"
         }
     }
     
@@ -523,6 +528,7 @@ extension Blockchain {
         case .dash: return 5
         case .gnosis: return 700
         case .optimism: return 614
+        case .ravencoin: return 175
         }
     }
     
@@ -581,6 +587,10 @@ extension Blockchain {
         case .dash:
             return BitcoinLegacyAddressService(
                 networkParams: isTestnet ?  DashTestNetworkParams() : DashMainNetworkParams()
+            )
+        case .ravencoin:
+            return BitcoinLegacyAddressService(
+                networkParams: isTestnet ?  RavencoinTestNetworkParams() : RavencoinMainNetworkParams()
             )
         }
     }
@@ -651,6 +661,7 @@ extension Blockchain: Codable {
         case .ethereumPoW: return "ethereum-pow-iou"
         case .ethereumFair: return "ethereumfair"
         case .saltPay: return "sxdai"
+        case .ravencoin: return "ravencoin"
         }
     }
     
@@ -701,6 +712,7 @@ extension Blockchain: Codable {
         case "ethereum-pow-iou": self = .ethereumPoW(testnet: isTestnet)
         case "ethereumfair": self = .ethereumFair
         case "sxdai": self = .saltPay
+        case "ravencoin": self = .ravencoin(testnet: isTestnet)
         default: throw BlockchainSdkError.decodingFailed
         }
     }
@@ -760,6 +772,10 @@ extension Blockchain {
             // Or another one https://testnet-faucet.dash.org/ - by Dash Core Group
         case .optimism:
             return URL(string: "https://optimismfaucet.xyz")! //another one https://faucet.paradigm.xyz
+        case .saltPay:
+            return URL(string: "https://gnosisfaucet.com")!
+        case .ravencoin:
+            return URL(string: "https://testnet.ravencoin.network")! // TBD
         default:
             return nil
         }
@@ -860,6 +876,12 @@ extension Blockchain {
             return URL(string: "https://optimistic.etherscan.io/address/\(address)")!
         case .saltPay:
             return URL(string: "https://blockscout.bicoccachain.net/address/\(address)")!
+        case .ravencoin:
+            if isTestnet {
+                return URL(string: "https://testnet.ravencoin.network/address/\(address)")!
+            }
+        
+            return URL(string: "https://ravencoin.network/address/\(address)")
         }
     }
 }
