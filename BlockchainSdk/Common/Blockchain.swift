@@ -448,6 +448,13 @@ extension Blockchain {
             return [
                 RPCEndpoint(url: URL(string: "https://rpc.bicoccachain.net")!),
             ]
+        case .ravencoin(let testnet):
+            if !testnet {
+                return [RPCEndpoint(url: URL(string: "https://rvn.nownodes.io")!)]
+            }
+            
+            return nil
+            
         default:
             return nil
         }
