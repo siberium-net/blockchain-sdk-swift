@@ -24,6 +24,8 @@ class BlockchairNetworkProvider: BitcoinNetworkProvider {
         }
     }
     
+    var supportsAddressPrefix: Bool { false }
+    
     private let provider: NetworkProvider<BlockchairTarget>
     private let endpoint: BlockchairEndpoint
     private let apiKey: String?

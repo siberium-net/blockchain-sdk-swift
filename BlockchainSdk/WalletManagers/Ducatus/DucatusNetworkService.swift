@@ -16,6 +16,8 @@ class DucatusNetworkService: BitcoinNetworkProvider {
     var host: String { provider.host }
     var supportsTransactionPush: Bool { false }
     
+    var supportsAddressPrefix: Bool { false }
+    
     init(configuration: NetworkProviderConfiguration) {
         provider = BitcoreProvider(configuration: configuration)
     }

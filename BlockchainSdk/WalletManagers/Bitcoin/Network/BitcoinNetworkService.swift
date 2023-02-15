@@ -22,9 +22,11 @@ class BitcoinNetworkService: MultiNetworkProvider, BitcoinNetworkProvider {
     
     var supportsTransactionPush: Bool { !providers.filter { $0.supportsTransactionPush }.isEmpty }
     
+    var supportsAddressPrefix: Bool { providers[currentProviderIndex].supportsAddressPrefix }
+    
     func getInfo(addresses: [String]) -> AnyPublisher<[BitcoinResponse], Error> {
         providerPublisher {
-            $0.getInfo(addresses: addresses)
+            $0.getInfo(addresses: addresses.map($0.removePrefixIfNeeded(from:)))
                 .retry(2)
                 .eraseToAnyPublisher()
         }
@@ -32,7 +34,7 @@ class BitcoinNetworkService: MultiNetworkProvider, BitcoinNetworkProvider {
     
     func getInfo(address: String) -> AnyPublisher<BitcoinResponse, Error> {
         providerPublisher{
-            $0.getInfo(address: address)
+            $0.getInfo(address: $0.removePrefixIfNeeded(from: address))
                 .retry(2)
                 .eraseToAnyPublisher()
         }
@@ -85,8 +87,18 @@ class BitcoinNetworkService: MultiNetworkProvider, BitcoinNetworkProvider {
     
     func getSignatureCount(address: String) -> AnyPublisher<Int, Error> {
         providerPublisher {
-            $0.getSignatureCount(address: address)
+            $0.getSignatureCount(address: $0.removePrefixIfNeeded(from: address))
         }
     }
     
+}
+
+fileprivate extension AnyBitcoinNetworkProvider {
+    func removePrefixIfNeeded(from address: String) -> String {
+        if supportsAddressPrefix {
+            return address
+        } else {
+            return address.removeAddressPrefix()
+        }
+    }
 }

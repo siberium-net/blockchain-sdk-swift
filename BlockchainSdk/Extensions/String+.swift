@@ -21,7 +21,7 @@ extension String {
         return self
     }
     
-    func removeBchPrefix() -> String {
+    func removeAddressPrefix() -> String {
         if let index = self.firstIndex(where: { $0 == ":" }) {
             let startIndex = self.index(index, offsetBy: 1)
             return String(self.suffix(from: startIndex))

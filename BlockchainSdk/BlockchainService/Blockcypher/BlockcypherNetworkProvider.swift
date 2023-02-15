@@ -13,6 +13,9 @@ import BitcoinCore
 
 class BlockcypherNetworkProvider: BitcoinNetworkProvider {
     var supportsTransactionPush: Bool { false }
+    
+    var supportsAddressPrefix: Bool { false }
+    
     var host: String {
         getTarget(for: .fee).baseURL.hostOrUnknown
     }

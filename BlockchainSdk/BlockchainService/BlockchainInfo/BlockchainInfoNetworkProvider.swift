@@ -23,6 +23,8 @@ class BlockchainInfoNetworkProvider: BitcoinNetworkProvider {
     
     var supportsTransactionPush: Bool { true }
     
+    var supportsAddressPrefix: Bool { false }
+    
     func getInfo(address: String) -> AnyPublisher<BitcoinResponse, Error> {
         addressUnspentsData(address)
             .tryMap {(addressResponse, unspentsResponse) throws -> (BitcoinResponse, [UInt64]) in

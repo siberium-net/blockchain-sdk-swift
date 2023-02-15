@@ -153,6 +153,8 @@ class BlockBookUtxoProvider {
 extension BlockBookUtxoProvider: BitcoinNetworkProvider {
     var supportsTransactionPush: Bool { false }
     
+    var supportsAddressPrefix: Bool { true }
+    
     func getInfo(address: String) -> AnyPublisher<BitcoinResponse, Error> {
         Publishers
             .Zip(addressData(address: address), unspentTxData(address: address))

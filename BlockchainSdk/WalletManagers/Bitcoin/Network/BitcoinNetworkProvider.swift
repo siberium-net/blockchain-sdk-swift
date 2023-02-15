@@ -11,6 +11,8 @@ import Combine
 
 protocol BitcoinNetworkProvider: AnyObject, HostProvider {
     var supportsTransactionPush: Bool { get }
+    var supportsAddressPrefix: Bool { get }
+    
     func getInfo(addresses: [String]) -> AnyPublisher<[BitcoinResponse], Error>
     func getInfo(address: String) -> AnyPublisher<BitcoinResponse, Error>
     func getFee() -> AnyPublisher<BitcoinFee, Error>
@@ -33,6 +35,7 @@ extension BitcoinNetworkProvider {
 
 class AnyBitcoinNetworkProvider: BitcoinNetworkProvider {
     var supportsTransactionPush: Bool { provider.supportsTransactionPush }
+    var supportsAddressPrefix: Bool { provider.supportsAddressPrefix }
     var host: String { provider.host }
     
     private let provider: BitcoinNetworkProvider
