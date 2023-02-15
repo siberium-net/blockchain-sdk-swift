@@ -150,6 +150,17 @@ class BlockBookUtxoProvider {
     }
 }
 
+extension Blockchain {
+    var supportsSmartFee: Bool {
+        switch self {
+        case .bitcoinCash:
+            return false
+        default:
+            return true
+        }
+    }
+}
+
 extension BlockBookUtxoProvider: BitcoinNetworkProvider {
     var supportsTransactionPush: Bool { false }
     
@@ -176,21 +187,30 @@ extension BlockBookUtxoProvider: BitcoinNetworkProvider {
     }
     
     func getFee() -> AnyPublisher<BitcoinFee, Error> {
-        provider
-            .requestPublisher(target(for: .fees))
+        let supportsSmartFee = blockchain.supportsSmartFee
+        return provider
+            .requestPublisher(target(for: .fees(smartFee: supportsSmartFee)))
             .filterSuccessfulStatusAndRedirectCodes()
-            .map(BlockBookFeeResponse.self)
-            .tryMap { [weak self] in
+            .tryMap { response -> Double in
+                if supportsSmartFee {
+                    let smartFeeResponse = try JSONDecoder().decode(BlockBookSmartFeeResponse.self, from: response.data)
+                    return smartFeeResponse.result.feerate
+                } else {
+                    let feeResponse = try JSONDecoder().decode(BlockBookFeeResponse.self, from: response.data)
+                    return feeResponse.result
+                }
+            }
+            .tryMap { [weak self] feerate in
                 guard let self else {
                     throw WalletError.empty
                 }
-                
-                let feeRate = Decimal($0.result.feerate) * self.blockchain.decimalValue
-                
+
+                let feeRate = Decimal(feerate) * self.blockchain.decimalValue
+
                 let min = (Decimal(0.8) * feeRate).rounded(roundingMode: .down)
                 let normal = feeRate
                 let max = (Decimal(1.2) * feeRate).rounded(roundingMode: .down)
-                
+
                 return BitcoinFee(minimalSatoshiPerByte: min, normalSatoshiPerByte: normal, prioritySatoshiPerByte: max)
             }
             .eraseToAnyPublisher()
