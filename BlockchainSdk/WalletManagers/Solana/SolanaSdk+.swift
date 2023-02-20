@@ -15,9 +15,9 @@ extension RPCEndpoint {
         RPCEndpoint(
             url: URL(string: "https://sol.nownodes.io")!,
             urlWebSocket: URL(string: "wss://sol.nownodes.io")!,
-            network: .mainnetBeta,
-            apiKeyHeaderName: Constants.nowNodesApiKeyHeaderName,
-            apiKeyHeaderValue: apiKey
+            network: .mainnetBeta//,
+            //apiKeyHeaderName: Constants.nowNodesApiKeyHeaderName,
+            //apiKeyHeaderValue: apiKey
         )
     }
     
