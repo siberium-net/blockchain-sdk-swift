@@ -452,7 +452,7 @@ extension Blockchain {
             let network = testnet ? "test" : "main"
             return [
                 URL(string: "https://rpc.\(network).siberium.net")!,
-                URL(string: "https://rpc.\(network).siberium.blch.ru")!,
+                URL(string: "https://rpc.\(network).siberium.net.ru")!,
             ]
         default:
             return nil
