@@ -208,7 +208,7 @@ public class WalletManagerFactory {
                 $0.networkService = StellarNetworkService(isTestnet: testnet, stellarSdk: stellarSdk)
             }
             
-        case .ethereum, .ethereumClassic, .rsk, .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .ethereumPoW, .optimism, .ethereumFair, .saltPay:
+        case .ethereum, .ethereumClassic, .rsk, .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .ethereumPoW, .optimism, .ethereumFair, .saltPay, .siberium:
             let manager: EthereumWalletManager
             let endpoints = blockchain.getJsonRpcEndpoints(
                 keys: EthereumApiKeys(

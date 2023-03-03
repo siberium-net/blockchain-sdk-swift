@@ -41,6 +41,7 @@ public enum Blockchain: Equatable, Hashable {
     case gnosis
     case optimism(testnet: Bool)
     case saltPay
+    case siberium(testnet: Bool)
     
     public var isTestnet: Bool {
         switch self {
@@ -84,6 +85,8 @@ public enum Blockchain: Equatable, Hashable {
             return false
         case .saltPay:
             return false
+        case .siberium(let testnet):
+            return testnet
         }
     }
     
@@ -104,7 +107,7 @@ public enum Blockchain: Equatable, Hashable {
         switch self {
         case .bitcoin, .litecoin, .bitcoinCash, .ducatus, .binance, .dogecoin, .dash:
             return 8
-        case .ethereum, .ethereumClassic, .ethereumPoW, .ethereumFair, .rsk, .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .optimism, .saltPay:
+        case .ethereum, .ethereumClassic, .ethereumPoW, .ethereumFair, .rsk, .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .optimism, .saltPay, .siberium:
             return 18
         case  .cardano, .xrp, .tezos, .tron:
             return 6
@@ -171,6 +174,8 @@ public enum Blockchain: Equatable, Hashable {
             return "ETHW"
         case .ethereumFair:
             return "ETF"
+        case .siberium:
+            return "SBR"
         }
     }
     
@@ -277,6 +282,7 @@ extension Blockchain {
         case .gnosis: return 100
         case .optimism: return isTestnet ? 420 : 10
         case .saltPay: return 29313331
+        case .siberium: return isTestnet ? 15666 : 111111
         default: return nil
         }
     }
@@ -442,6 +448,12 @@ extension Blockchain {
             return [
                 URL(string: "https://rpc.bicoccachain.net")!,
             ]
+        case .siberium(let testnet):
+            let network = testnet ? "test" : "main"
+            return [
+                URL(string: "https://rpc.\(network).siberium.net")!,
+                URL(string: "https://rpc.\(network).siberium.net.ru")!,
+            ]
         default:
             return nil
         }
@@ -521,6 +533,7 @@ extension Blockchain {
         case .dash: return 5
         case .gnosis: return 700
         case .optimism: return 614
+        case .siberium: return 900
         }
     }
     
@@ -549,7 +562,7 @@ extension Blockchain {
         case .stellar:
             return StellarAddressService()
         case .ethereum, .ethereumClassic, .ethereumPoW, .ethereumFair,
-                .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .optimism, .saltPay:
+                .bsc, .polygon, .avalanche, .fantom, .arbitrum, .gnosis, .optimism, .saltPay, .siberium:
             return EthereumAddressService()
         case .rsk:
             return RskAddressService()
@@ -601,6 +614,8 @@ extension Blockchain {
             return ["bnb:"]
         case .dogecoin:
             return ["doge:", "dogecoin:"]
+        case .siberium:
+            return ["sbr:", "siberium:"]
         default:
             return [""]
         }
@@ -649,6 +664,7 @@ extension Blockchain: Codable {
         case .ethereumPoW: return "ethereum-pow-iou"
         case .ethereumFair: return "ethereumfair"
         case .saltPay: return "sxdai"
+        case .siberium: return "siberium"
         }
     }
     
@@ -699,6 +715,7 @@ extension Blockchain: Codable {
         case "ethereum-pow-iou": self = .ethereumPoW(testnet: isTestnet)
         case "ethereumfair": self = .ethereumFair
         case "sxdai": self = .saltPay
+        case "siberium": self = .siberium(testnet: isTestnet)
         default: throw BlockchainSdkError.decodingFailed
         }
     }
@@ -758,6 +775,8 @@ extension Blockchain {
             // Or another one https://testnet-faucet.dash.org/ - by Dash Core Group
         case .optimism:
             return URL(string: "https://optimismfaucet.xyz")! //another one https://faucet.paradigm.xyz
+        case .siberium:
+            return URL(string: "https://faucet.test.siberium.net")!
         default:
             return nil
         }
@@ -858,6 +877,9 @@ extension Blockchain {
             return URL(string: "https://optimistic.etherscan.io/address/\(address)")!
         case .saltPay:
             return URL(string: "https://blockscout.bicoccachain.net/address/\(address)")!
+        case .siberium(let isTestnet):
+            let network = isTestnet ? "test" : "main"
+            return URL(string: "https://explorer.\(network).siberium.net/address/\(address)")
         }
     }
 }
@@ -905,6 +927,7 @@ extension Blockchain {
         case "ethereum-pow-iou": return .ethereumPoW(testnet: isTestnet)
         case "ethereumfair": return .ethereumFair
         case "sxdai": return .saltPay
+        case "siberium": return .siberium(testnet: isTestnet)
         default: return nil
         }
     }
